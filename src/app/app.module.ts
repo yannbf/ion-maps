@@ -8,9 +8,7 @@ import { GoogleMaps } from '@ionic-native/google-maps';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { GoogleMapsProvider } from '../providers/google-maps/google-maps';
-import { NativeGoogleMapsProvider } from '../providers/native-google-maps/native-google-maps';
-import { JavascriptGoogleMapsProvider } from '../providers/javascript-google-maps/javascript-google-maps';
+import { MyProvidersModule } from '../providers/providers.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +17,8 @@ import { JavascriptGoogleMapsProvider } from '../providers/javascript-google-map
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    MyProvidersModule.forRoot(),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -30,9 +29,6 @@ import { JavascriptGoogleMapsProvider } from '../providers/javascript-google-map
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    GoogleMapsProvider,
-    NativeGoogleMapsProvider,
-    JavascriptGoogleMapsProvider,
     Geolocation,
     GoogleMaps,
   ]

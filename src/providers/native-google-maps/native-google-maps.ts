@@ -1,3 +1,6 @@
+import { Observable } from 'rxjs/Rx';
+import { fromPromise } from 'rxjs/observable/fromPromise';
+import { BaseGoogleMapsProvider } from '../base-maps.interface';
 import { ElementRef, Injectable } from '@angular/core';
 import {
     CameraPosition,
@@ -22,7 +25,8 @@ export class NativeGoogleMapsProvider {
   }
 
   // Note: Call this method on ngAfterViewInit
-  create(element: ElementRef) {
+  create(element: ElementRef): Observable<any> {
+    debugger;
 
     const cameraPosition = {
       zoom  : 18,
@@ -50,26 +54,21 @@ export class NativeGoogleMapsProvider {
     };
 
     this.map = this.googleMaps.create(element.nativeElement, options);
-    return this.map.one(GoogleMapsEvent.MAP_READY);
+    return this.map.on(GoogleMapsEvent.MAP_READY);
   }
 
-  centerToGeolocation() {
-    return this.getGeolocationPosition().then((position) => {
+  centerToGeolocation(): Observable<any>{
+    return this.getGeolocationPosition().map((position) => {
       return this.centerToPosition(position);
     }, error => {
       return Promise.reject(error);
     });
   }
 
-  getGeolocationPosition() {
-    return new Promise((resolve, reject) => {
-      this.geolocation.getCurrentPosition().then((position) => {
-        const latLng: LatLng = new LatLng(position.coords.latitude, position.coords.longitude);
-        resolve(latLng);
-      }, error => {
-        reject(error);
-      });
-    });
+  getGeolocationPosition(): Observable<any> {
+    const geolocationPromise = this.geolocation.getCurrentPosition()
+      .then(position => new LatLng(position.coords.latitude, position.coords.longitude));
+    return fromPromise(geolocationPromise);
   }
 
   centerToPosition(latLng: any, zoom?: number, tilt?: number) {
@@ -78,10 +77,10 @@ export class NativeGoogleMapsProvider {
       zoom  : zoom || 15,
       tilt  : tilt || 10
     };
-    return this.map.moveCamera(cameraPosition);
+    return fromPromise(this.map.moveCamera(cameraPosition));
   }
 
-  addMarker(position, title: string, infoClickCallback, animated = true) {
+  addMarker(position, title: string, infoClickCallback, animated = true): Observable<any> {
     const markerOptions: MarkerOptions = {
       position,
       title,
@@ -89,12 +88,12 @@ export class NativeGoogleMapsProvider {
       infoWindowAnchor: infoClickCallback
     };
 
-    return this.map.addMarker(markerOptions);
+    return fromPromise(this.map.addMarker(markerOptions));
   }
 
   addMarkerToGeolocation(title: string, infoClickCallback, animated?: boolean) {
-    this.getGeolocationPosition().then(position => {
-      this.addMarker(position, title, infoClickCallback, animated);
-    });
+    // this.getGeolocationPosition().then(position => {
+    //   this.addMarker(position, title, infoClickCallback, animated);
+    // });
   }
 }
