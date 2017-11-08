@@ -1,26 +1,41 @@
-This is a starter template for [Ionic](http://ionicframework.com/docs/) projects.
+## IonMaps
+It's a simple component that renders the best possible google map on the device, depending on what platforms it's running on. If on web, it will use javascript google maps, if on a native device, it will use native google maps.
 
-## How to use this template
-
-*This template does not work on its own*. The shared files for each starter are found in the [ionic2-app-base repo](https://github.com/ionic-team/ionic2-app-base).
-
-To use this template, either create a new ionic project using the ionic node.js utility, or copy the files from this repository into the [Starter App Base](https://github.com/ionic-team/ionic2-app-base).
-
-### With the Ionic CLI:
-
-Take the name after `ionic2-starter-`, and that is the name of the template to be used when using the `ionic start` command below:
-
-```bash
-$ sudo npm install -g ionic cordova
-$ ionic start myBlank blank
+### Usage
+html:
+```html
+<ion-content>
+    <ion-maps><ion-maps>
+</ion-content>
 ```
 
-Then, to run it, cd into `myBlank` and run:
+typescript:
+```js
+export class HomePage {
+  // You can access methods from this object
+  @ViewChild(IonMaps) ionMaps: IonMaps;
 
-```bash
-$ ionic cordova platform add ios
-$ ionic cordova run ios
+  // Example of usage:
+  addMarker() {
+    this.ionMaps.addMarker();
+  }
+
+  centerToGeolocation() {
+    this.ionMaps.centerToGeolocation();
+  }
+}
 ```
 
-Substitute ios for android if not on a Mac.
+### Dependencies
+In order to run this project properly, you have to install the native maps plugin as such:
 
+```bash
+$ ionic cordova plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="YourKeyHere" --variable API_KEY_FOR_IOS="YourKeyHere" --variable LOCATION_WHEN_IN_USE_DESCRIPTION="Show your location on the map" --variable LOCATION_ALWAYS_USAGE_DESCRIPTION="Trace your location on the map"
+$ npm install --save @ionic-native/google-maps
+```
+
+If you run into any issues such as not finding `google` definition, run:
+
+```bash
+npm install --save @types/googlemaps
+```
