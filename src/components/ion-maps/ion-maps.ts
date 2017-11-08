@@ -1,4 +1,4 @@
-import { NativeGoogleMapsProvider } from '../../providers/native-google-maps/native-google-maps';
+import { NativeGoogleMapsProvider } from '../../providers/maps/native-google-maps/native-google-maps';
 import { NavController } from 'ionic-angular';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 
