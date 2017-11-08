@@ -1,8 +1,8 @@
 {
-    "name": "MultiplatformGoogleMaps",
+    "name": "ion-maps",
     "version": "0.0.1",
-    "author": "Ionic Framework",
-    "homepage": "http://ionicframework.com/",
+    "author": "Yann Braga",
+    "homepage": "http://yannbraga.com/",
     "private": true,
     "scripts": {
         "clean": "ionic-app-scripts clean",
