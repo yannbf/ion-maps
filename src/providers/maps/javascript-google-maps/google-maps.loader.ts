@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { mapsConfig } from './google-maps.config';
+import { mapSettings } from './google-maps.settings';
 
 @Injectable()
 export class GoogleMapsLoader {
@@ -15,7 +15,7 @@ export class GoogleMapsLoader {
                     resolve('google maps api loaded');
                 };
 
-                const { url, version, apiKey } = mapsConfig;
+                const { url, version, apiKey } = mapSettings;
                 const mapsNode = document.createElement('script');
                 mapsNode.src = `${url}js?v=${version}&key=${apiKey}&callback=__onGoogleMapsLoaded`;
                 mapsNode.type = 'text/javascript';

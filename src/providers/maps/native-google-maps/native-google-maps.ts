@@ -1,3 +1,4 @@
+import { mapStyles } from '../maps.styles';
 import { ElementRef, Injectable } from '@angular/core';
 import {
     CameraPosition,
@@ -22,16 +23,16 @@ export class NativeGoogleMapsProvider {
   }
 
   // Note: Call this method on ngAfterViewInit
-  create(element: ElementRef) {
+  create(element: ElementRef, mapConfig: any = {}) {
 
     const cameraPosition = {
-      zoom  : 18,
-      tilt  : 10
+      zoom: mapConfig.zoom || 18,
+      tilt: mapConfig.tilt || 10
     };
 
     const options = {
-      mapType: GoogleMapsMapTypeId.NORMAL,
-      styles: [],
+      mapType: mapConfig.mapType || GoogleMapsMapTypeId.NORMAL,
+      styles: mapConfig.styles || mapStyles.standard,
       camera: cameraPosition,
       backgroundColor: 'white',
       controls: {

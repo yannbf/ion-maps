@@ -1,3 +1,4 @@
+import { mapStyles } from '../maps.styles';
 import { GoogleMapsLoader } from './google-maps.loader';
 import { BaseGoogleMapsProvider } from '../base-maps.interface';
 import { ElementRef, Injectable } from '@angular/core';
@@ -13,16 +14,17 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider{
   ) { }
 
   // Note: Call this method on ngAfterViewInit
-  create(mapElement: ElementRef): Promise<any> {
-    return GoogleMapsLoader.load().then(_ => this.initMap(mapElement));
+  create(mapElement: ElementRef, mapConfig = {}): Promise<any> {
+    return GoogleMapsLoader.load().then(_ => this.initMap(mapElement, mapConfig));
   }
 
-  initMap(mapElement: ElementRef) {
+  initMap(mapElement: ElementRef, mapConfig) {
     const mapOptions: google.maps.MapOptions  = {
-      zoom: 18,
-      tilt: 10,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      disableDefaultUI: true
+      zoom: mapConfig.zoom || 18,
+      tilt: mapConfig.tilt || 10,
+      mapTypeId: mapConfig.mapTypeId || google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: mapConfig.disableDefaultUI || true,
+      styles: mapConfig.styles || mapStyles.standard
     };
 
     this.map = new google.maps.Map(mapElement.nativeElement, mapOptions);
