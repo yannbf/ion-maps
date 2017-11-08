@@ -1,3 +1,4 @@
+import { ComponentsModule } from '../components/components.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -8,7 +9,6 @@ import { GoogleMaps } from '@ionic-native/google-maps';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { MyProvidersModule } from '../providers/providers.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { MyProvidersModule } from '../providers/providers.module';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    MyProvidersModule.forRoot(),
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
