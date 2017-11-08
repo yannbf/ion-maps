@@ -8,7 +8,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
     <div #map [style.height]="height" [style.width]="width"></div>
   `
 })
-export class IonMapsComponent {
+export class IonMaps {
 
   @ViewChild('map') mapElement: ElementRef;
 
@@ -21,7 +21,7 @@ export class IonMapsComponent {
   ) { }
 
   // Load map only after view is initialized
-  ngAfterViewInit() {
+  private ngAfterViewInit() {
     this.mapsCtrl.create(this.mapElement).then((data) => {
       this.mapsCtrl.centerToGeolocation();
     });
@@ -31,4 +31,7 @@ export class IonMapsComponent {
     this.mapsCtrl.addMarkerToGeolocation('Click me!', null);
   }
 
+  centerToGeolocation() {
+    return this.mapsCtrl.centerToGeolocation();
+  }
 }

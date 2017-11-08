@@ -1,11 +1,11 @@
 import { MyProvidersModule } from '../providers/providers.module';
 import { NgModule } from '@angular/core';
-import { IonMapsComponent } from './ion-maps/ion-maps';
+import { IonMaps } from './ion-maps/ion-maps';
 @NgModule({
-	declarations: [IonMapsComponent],
+	declarations: [IonMaps],
 	imports: [
     MyProvidersModule.forRoot(),
   ],
-	exports: [IonMapsComponent]
+	exports: [IonMaps]
 })
 export class ComponentsModule {}
