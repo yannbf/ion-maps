@@ -1,8 +1,8 @@
 import { mapStyles } from '../maps.styles';
 import { ElementRef, Injectable } from '@angular/core';
 import {
-    CameraPosition,
     GoogleMap,
+    GoogleMapOptions,
     GoogleMaps,
     GoogleMapsAnimation,
     GoogleMapsEvent,
@@ -24,30 +24,21 @@ export class NativeGoogleMapsProvider {
 
   // Note: Call this method on ngAfterViewInit
   create(element: ElementRef, mapConfig: any = {}) {
-
-    const cameraPosition = {
-      zoom: mapConfig.zoom || 18,
-      tilt: mapConfig.tilt || 10
-    };
-
-    const options = {
-      mapType: mapConfig.mapType || GoogleMapsMapTypeId.NORMAL,
-      styles: mapConfig.styles || mapStyles.standard,
-      camera: cameraPosition,
-      backgroundColor: 'white',
+    let options: GoogleMapOptions = {
+      camera: {
+        target: {
+          lat: 43.0741904,
+          lng: -89.3809802
+        },
+        zoom: mapConfig.zoom || 18,
+        tilt: mapConfig.zoom || 30
+      },
       controls: {
-        compass: true,
+        compass: false,
         myLocationButton: true,
-        indoorPicker: true,
         zoom: true
       },
-      gestures: {
-        scroll: true,
-        tilt: true,
-        rotate: true,
-        zoom: true
-      },
-      preferences: null,
+      styles: mapConfig.styles || mapStyles.standard
     };
 
     this.map = this.googleMaps.create(element.nativeElement, options);
@@ -55,22 +46,13 @@ export class NativeGoogleMapsProvider {
   }
 
   centerToGeolocation() {
-    return this.getGeolocationPosition().then((position) => {
-      return this.centerToPosition(position);
-    }, error => {
-      return Promise.reject(error);
-    });
+    return this.getGeolocationPosition()
+      .then((position) => this.centerToPosition(position));
   }
 
   getGeolocationPosition() {
-    return new Promise((resolve, reject) => {
-      this.geolocation.getCurrentPosition().then((position) => {
-        const latLng: LatLng = new LatLng(position.coords.latitude, position.coords.longitude);
-        resolve(latLng);
-      }, error => {
-        reject(error);
-      });
-    });
+    return this.geolocation.getCurrentPosition()
+      .then((position) => new LatLng(position.coords.latitude, position.coords.longitude));
   }
 
   centerToPosition(latLng: any, zoom?: number, tilt?: number) {
@@ -94,8 +76,7 @@ export class NativeGoogleMapsProvider {
   }
 
   addMarkerToGeolocation(title: string, infoClickCallback, animated?: boolean) {
-    this.getGeolocationPosition().then(position => {
-      this.addMarker(position, title, infoClickCallback, animated);
-    });
+    return this.getGeolocationPosition()
+      .then(position => this.addMarker(position, title, infoClickCallback, animated));
   }
 }
