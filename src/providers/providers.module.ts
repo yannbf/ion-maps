@@ -2,9 +2,8 @@ import { InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 
-import { JavascriptGoogleMapsProvider } from './javascript-google-maps/javascript-google-maps';
-import { NativeGoogleMapsProvider } from './native-google-maps/native-google-maps';
-
+import { NativeGoogleMapsProvider } from './maps/native-google-maps/native-google-maps';
+import { JavascriptGoogleMapsProvider } from './maps/javascript-google-maps/javascript-google-maps';
 /**
  * Checks if the supplied document url is a one used by
  * cordova to load the app.
