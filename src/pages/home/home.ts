@@ -17,14 +17,13 @@ export class HomePage {
 
   // Load map only after view is initialized
   ngAfterViewInit() {
-    this.mapsCtrl.create(this.mapElement).subscribe((data) => {
-      debugger;
+    this.mapsCtrl.create(this.mapElement).then((data) => {
       this.mapsCtrl.centerToGeolocation();
     });
   }
 
   addMarker() {
-    // this.mapsCtrl.addMarkerToGeolocation('Click me!', this.callbackSample);
+    this.mapsCtrl.addMarkerToGeolocation('Click me!', this.callbackSample);
   }
 
   callbackSample() {
