@@ -4,7 +4,9 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'ion-maps',
-  templateUrl: 'ion-maps.html'
+  template: `
+    <div #map [style.height]="height" [style.width]="width"></div>
+  `
 })
 export class IonMapsComponent {
 
