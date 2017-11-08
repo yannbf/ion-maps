@@ -22,7 +22,7 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider{
     const mapOptions: google.maps.MapOptions  = {
       zoom: mapConfig.zoom || 18,
       tilt: mapConfig.tilt || 10,
-      mapTypeId: mapConfig.mapTypeId || google.maps.MapTypeId.ROADMAP,
+      mapTypeId: mapConfig.mapType || google.maps.MapTypeId.ROADMAP,
       disableDefaultUI: mapConfig.disableDefaultUI || true,
       styles: mapConfig.styles || mapStyles.standard
     };
@@ -32,21 +32,13 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider{
   }
 
   centerToGeolocation(): Promise<any> {
-    const centerGeolocationPromise = this.getGeolocationPosition()
-    .then(
-      position => this.centerToPosition(position),
-      error => Promise.reject(error)
-    );
-
-    return centerGeolocationPromise;
+    return this.getGeolocationPosition()
+      .then(position => this.centerToPosition(position));
   }
 
   getGeolocationPosition(): Promise<google.maps.LatLng> {
-    const geolocationPromise = this.geolocation.getCurrentPosition().then((position) => {
-      return new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    }, error => Promise.reject(error));
-
-    return geolocationPromise;
+    return this.geolocation.getCurrentPosition()
+      .then((position) => new google.maps.LatLng(position.coords.latitude, position.coords.longitude));
   }
 
   centerToPosition(latLng: google.maps.LatLng): Promise<any> {
