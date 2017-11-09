@@ -24,8 +24,36 @@ export class IonStaticMapsComponent {
       + '&center=' + (latLng ? latLng : address)
       + '&zoom=' + zoom
       + '&size=600x300'
-      + '&maptype=' + mapType;
+      + '&maptype=' + mapType
+      + this.convertMapStyles(mapStyles.military)
 
     return url;
+  }
+
+  convertMapStyles(styles) {
+    const extractStyleRules = styles =>
+      styles.map(rule => {
+        let ruleElements = '';
+        for (let s in rule) {
+          ruleElements += `${s}:${rule[s]}|`;
+        }
+        return ruleElements.substring(0, ruleElements.length);
+      })
+      .reduce((x, y) => x + y);
+
+    let styleStr = styles
+      .map((style) => {
+        let url = '&style=';
+        url += style.featureType ? 'feature:' + style.featureType + '|' : '';
+        url += style.elementType ? 'element:' + style.elementType + '|' : '';
+        url += extractStyleRules(style.stylers);
+        return url.substring(0, url.length - 1);
+      })
+      .reduce((x, y) => x + y);
+
+    // static maps url only takes hex color in the given format: 0xRRGGBB, so we have to convert
+    styleStr = styleStr.replace(/#/g,'0x');
+
+    return encodeURI(styleStr);
   }
 }
