@@ -7,7 +7,11 @@
 </ion-header>
 
 <ion-content text-center>
+  <h2>Interactive map</h2>
   <ion-maps></ion-maps>
+
+  <h2>Static map</h2>
+  <ion-static-maps [options]="mapOptions" lat="40.714728" lng="-73.998672"></ion-static-maps>
 </ion-content>
 <ion-footer>
   <button ion-button
