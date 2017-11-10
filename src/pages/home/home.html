@@ -6,12 +6,15 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content text-center>
+<ion-content padding text-center>
+  <h2>Static map</h2>
+  <ion-static-maps [options]="mapOptions" lat="40.714728" lng="-73.998672">
+    <ion-marker lat="40.718217" lng="-73.998284" color="yellow" label="Y"></ion-marker>
+    <ion-marker lat="40.718217" lng="-73.993434" icon="http://cdn.sstatic.net/Sites/stackexchange/img/favicon.ico"></ion-marker>
+  </ion-static-maps>
+
   <h2>Interactive map</h2>
   <ion-maps></ion-maps>
-
-  <h2>Static map</h2>
-  <ion-static-maps [options]="mapOptions" lat="40.714728" lng="-73.998672"></ion-static-maps>
 </ion-content>
 <ion-footer>
   <button ion-button
