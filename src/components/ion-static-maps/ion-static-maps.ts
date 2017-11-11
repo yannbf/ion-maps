@@ -1,4 +1,4 @@
-import { IonMarkerComponent } from '../ion-marker/ion-marker';
+import { IonMarker } from '../ion-marker/ion-marker';
 import { mapStyles } from '../../providers/maps/maps.styles';
 import { mapSettings } from '../../providers/maps/javascript-google-maps/google-maps.settings';
 import { Component, ContentChildren, ElementRef, Input, QueryList, Renderer2, ViewChild } from '@angular/core';
@@ -6,7 +6,7 @@ import { Component, ContentChildren, ElementRef, Input, QueryList, Renderer2, Vi
 @Component({
   selector: 'ion-static-maps',
   template: `
-    <img class="ion-maps" #map [src]="mapsUrl"/>
+    <img class="ion-maps" #map [src]="mapsUrl" alt="maps"/>
     <ng-content></ng-content>
   `,
   styles: [`
@@ -22,24 +22,66 @@ import { Component, ContentChildren, ElementRef, Input, QueryList, Renderer2, Vi
   `]
 })
 export class IonStaticMapsComponent {
-
+  /**
+   * The latitude position of the map.
+   */
   @Input() address: string;
+  /**
+   * The latitude position of the map.
+   */
   @Input() lat: number;
+  /**
+   * The latitude position of the map.
+   */
   @Input() lng: number;
-  @Input() options: StaticIonMapOptions;
-  @ViewChild('map') mapEl: ElementRef;
-  @ContentChildren(IonMarkerComponent) mapMarkers: QueryList<IonMarkerComponent>;
 
-  markers: Array<IonMarkerComponent>;
-  mapsUrl: string;
+  /**
+   * The height of the map. Default value is 400px.
+   */
+  @Input() height: number = 400;
+
+  /**
+   * The width of the map. Default value is 400px.
+   */
+  @Input() width: number = 400;
+
+  /**
+   * The zoom of the map. Default value is 15.
+   */
+  @Input() zoom: number = 15;
+
+  /**
+   * The format of the map. Default value is jpg.
+   */
+  @Input() format: string | StaticIonMapFormat;
+
+  /**
+   * The language of the map.
+   */
+  @Input() language: string;
+
+  /**
+   * The type of the map.  Default value is ROADMAP.
+   */
+  @Input() mapType: string | google.maps.MapTypeId;
+
+  /**
+   * The style of the map.
+   */
+  @Input() style: string | google.maps.StyledMapType[];
+
+  @ViewChild('map') mapEl: ElementRef;
+  @ContentChildren(IonMarker) mapMarkers: QueryList<IonMarker>;
+
+  private markers: Array<IonMarker>;
+  private mapsUrl: string;
 
   constructor(private renderer: Renderer2) { }
 
   ngAfterViewInit() {
     // Set size to the element so it already fits the screen before loading
-    let { width = 400, height = 400 } = this.options;
-    this.renderer.setStyle(this.mapEl.nativeElement, 'height', `${height}px`);
-    this.renderer.setStyle(this.mapEl.nativeElement, 'width', `${width}px`);
+    this.renderer.setStyle(this.mapEl.nativeElement, 'height', `${this.height}px`);
+    this.renderer.setStyle(this.mapEl.nativeElement, 'width', `${this.width}px`);
   }
 
   ngAfterContentInit() {
@@ -64,13 +106,13 @@ export class IonStaticMapsComponent {
       language,
       format,
       style
-    } = this.options;
+    } = this;
 
     let url = mapSettings.staticMapsUrl
       + 'key=' + mapSettings.apiKey
-      + '&center=' + 'Brooklyn+Bridge,New+York,NY'// (latLng ? latLng : this.address)
-      + '&zoom=' + (zoom || 13)
-      + '&size=' + (width || 400) + 'x' + (height || 400)
+      + '&center=' + (latLng ? latLng : this.address)
+      + '&zoom=' + zoom
+      + '&size=' + `${width}x${height}`
       + ( mapType ? ('&maptype=' + mapType) : '' )
       + ( language ? ('&language=' + language) : '' )
       + ( format ? ('&format=' + format) : '' )
@@ -84,11 +126,11 @@ export class IonStaticMapsComponent {
 
   buildMarkersUrl() {
     return this.mapMarkers
-    .map(m => {
-      let iconOrLabel = m.icon ? `icon:${m.icon}` : `label:${m.label}`;
-      return `&markers=color:${m.color}|${iconOrLabel}|${m.lat},${m.lng}`;
-    })
-    .reduce((x,y) => x + y)
+      .map(m => {
+        let iconOrLabel = m.iconUrl ? `icon:${m.iconUrl}` : `label:${m.label}`;
+        return `&markers=color:${m.color}|${iconOrLabel}|${m.lat},${m.lng}`;
+      })
+      .reduce((x,y) => x + y)
   }
 
   convertMapStyles(styles) {
@@ -117,16 +159,6 @@ export class IonStaticMapsComponent {
 
     return styleStr;
   }
-}
-
-export interface StaticIonMapOptions {
-  zoom?: number,
-  width?: number,
-  height?: number,
-  mapType?: StaticIonMapType,
-  style?: Array<any>,
-  format?: StaticIonMapFormat,
-  language?: string,
 }
 
 export enum StaticIonMapType {

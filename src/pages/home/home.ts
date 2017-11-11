@@ -11,13 +11,12 @@ import { NavController } from 'ionic-angular';
 export class HomePage {
 
   @ViewChild(IonMaps) ionMaps: IonMaps;
-  mapOptions: StaticIonMapOptions = {};
 
   constructor(
     public navCtrl: NavController,
   ) { }
 
   addMarker() {
-    this.ionMaps.addMarker();
+    this.ionMaps.centerToGeolocation();
   }
 }

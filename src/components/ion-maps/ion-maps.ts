@@ -1,35 +1,57 @@
+import { Component, ContentChildren, ElementRef, Input, QueryList, ViewChild } from '@angular/core';
+
+import { IonMarker } from '../ion-marker/ion-marker';
 import { NativeGoogleMapsProvider } from '../../providers/maps/native-google-maps/native-google-maps';
-import { NavController } from 'ionic-angular';
-import { Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'ion-maps',
   template: `
     <div #map [style.height]="height" [style.width]="width"></div>
+    <ng-content></ng-content>
   `
 })
 export class IonMaps {
+  /**
+   * The latitude position of the map.
+   */
+  @Input() lat: number;
 
-  @ViewChild('map') mapElement: ElementRef;
+  /**
+   * The longitude position of the map.
+   */
+  @Input() lng: number;
 
-  height = '100%';
-  width = '100%';
+  /**
+   * The height of the map. Default value is '100%'.
+   */
+  @Input() height: string = '100%';
 
-  constructor(
-    public navCtrl: NavController,
-    public mapsCtrl: NativeGoogleMapsProvider
-  ) { }
+  /**
+   * The width of the map. Default value is '100%'.
+   */
+  @Input() width: string = '100%';
 
-  // Load map only after view is initialized
-  private ngAfterViewInit() {
-    this.mapsCtrl.create(this.mapElement).then((data) => {
-      this.mapsCtrl.centerToGeolocation();
-    });
+  /**
+   * The zoom of the map. Default value is 16.
+   */
+  @Input() zoom: number = 15;
+
+  /**
+   * The tilt of the map.
+   */
+  @Input() tilt: number;
+
+  @ViewChild('map') element: ElementRef;
+  @ContentChildren(IonMarker) markers: QueryList<IonMarker>;
+
+  ngAfterContentInit() {
+    // After content is rendered, load markers, if any
+    let markers = this.markers.toArray();
+    // Then, generate the map itself
+    this.mapsCtrl.create(this, markers);
   }
 
-  addMarker() {
-    this.mapsCtrl.addMarkerToGeolocation('Click me!', null);
-  }
+  constructor(public mapsCtrl: NativeGoogleMapsProvider) { }
 
   centerToGeolocation() {
     return this.mapsCtrl.centerToGeolocation();

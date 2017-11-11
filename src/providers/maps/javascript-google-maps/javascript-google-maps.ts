@@ -1,3 +1,5 @@
+import { IonMarker } from '../../../components/ion-marker/ion-marker';
+import { IonMaps } from '../../../components/ion-maps/ion-maps';
 import { mapStyles } from '../maps.styles';
 import { GoogleMapsLoader } from './google-maps.loader';
 import { BaseGoogleMapsProvider } from '../base-maps.interface';
@@ -5,7 +7,7 @@ import { ElementRef, Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
 
 @Injectable()
-export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider{
+export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
   map: google.maps.Map;
   markers = new Array<google.maps.Marker>();
 
@@ -14,21 +16,37 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider{
   ) { }
 
   // Note: Call this method on ngAfterViewInit
-  create(mapElement: ElementRef, mapConfig = {}): Promise<any> {
-    return GoogleMapsLoader.load().then(_ => this.initMap(mapElement, mapConfig));
+  create(map: IonMaps, markers = []): Promise<any> {
+    return GoogleMapsLoader
+      .load()
+      .then(_ => this.initMap(map))
+      .then(_ => this.loadMarkers(markers));
   }
 
-  initMap(mapElement: ElementRef, mapConfig) {
+  initMap(map: IonMaps) {
+    const {
+      lat,
+      lng,
+      zoom,
+    } = map;
+
     const mapOptions: google.maps.MapOptions  = {
-      zoom: mapConfig.zoom || 18,
-      tilt: mapConfig.tilt || 10,
-      mapTypeId: mapConfig.mapType || google.maps.MapTypeId.ROADMAP,
-      disableDefaultUI: mapConfig.disableDefaultUI || true,
-      styles: mapConfig.styles || mapStyles.standard
+      center: new google.maps.LatLng(lat, lng),
+      zoom,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      disableDefaultUI: true,
+      styles: mapStyles.standard,
+      // mapTypeId: mapType,
+      // disableDefaultUI,
+      // styles
     };
 
-    this.map = new google.maps.Map(mapElement.nativeElement, mapOptions);
-    return this.map;
+    this.map = new google.maps.Map(map.element.nativeElement, mapOptions);
+    return Promise.resolve(this.map);
+  }
+
+  loadMarkers(markers) {
+    markers.map(marker => this.addMarker(marker));
   }
 
   centerToGeolocation(): Promise<any> {
@@ -45,33 +63,32 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider{
     return Promise.resolve(this.map.panTo(latLng));
   }
 
-  addMarker(position :google.maps.LatLng,
-            title: string,
-            infoClickCallback,
-            animated = true): Promise<google.maps.Marker> {
-    const marker = new google.maps.Marker({
+  addMarker(marker: IonMarker): Promise<google.maps.Marker> {
+    const { lat, lng, label, iconUrl, title,
+            animated, draggable, opacity, visible,
+            zIndex } = marker;
+    const mapMarker = new google.maps.Marker({
+      label,
       title,
-      position,
+      opacity,
+      visible,
+      zIndex,
+      icon: iconUrl,
+      draggable,
+      position: new google.maps.LatLng(lat,lng),
       map: this.map,
       animation: animated ? google.maps.Animation.DROP : null,
     });
 
-    const infoWindow = new google.maps.InfoWindow({ content: title });
+    if(title) {
+      const infoWindow = new google.maps.InfoWindow({ content: title });
+      mapMarker.addListener('click', _ => infoWindow.open(this.map, mapMarker));
+      // infoWindow.addListener('click', _ => infoClickCallback);
+    }
 
-    marker.addListener('click', _ => infoWindow.open(this.map, marker));
-    infoWindow.addListener('click', _ => infoClickCallback);
+    this.markers.push(mapMarker);
 
-    this.markers.push(marker);
-
-    return Promise.resolve(marker);
+    return Promise.resolve(mapMarker);
   }
 
-  addMarkerToGeolocation(title: string, infoClickCallback, animated?: boolean): Promise<google.maps.Marker> {
-    const geolocationPromise = this.getGeolocationPosition()
-      .then(position => {
-        return this.addMarker(position, title, infoClickCallback, animated);
-      });
-
-    return geolocationPromise;
-  }
 }

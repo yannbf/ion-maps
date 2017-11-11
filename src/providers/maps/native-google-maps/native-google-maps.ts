@@ -1,12 +1,14 @@
+import { IonMarker } from '../../../components/ion-marker/ion-marker';
+import { IonMaps } from '../../../components/ion-maps/ion-maps';
+import { BaseGoogleMapsProvider } from '../base-maps.interface';
 import { mapStyles } from '../maps.styles';
-import { ElementRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
     GoogleMap,
     GoogleMapOptions,
     GoogleMaps,
     GoogleMapsAnimation,
     GoogleMapsEvent,
-    GoogleMapsMapTypeId,
     LatLng,
     MarkerOptions,
 } from '@ionic-native/google-maps';
@@ -14,7 +16,7 @@ import {
 import { Geolocation } from '@ionic-native/geolocation';
 
 @Injectable()
-export class NativeGoogleMapsProvider {
+export class NativeGoogleMapsProvider implements BaseGoogleMapsProvider{
   map: GoogleMap;
 
   constructor(
@@ -23,15 +25,16 @@ export class NativeGoogleMapsProvider {
   }
 
   // Note: Call this method on ngAfterViewInit
-  create(element: ElementRef, mapConfig: any = {}) {
+  create(map: IonMaps, markers = [], mapConfig: any = {}) {
+
     let options: GoogleMapOptions = {
       camera: {
         target: {
-          lat: 43.0741904,
-          lng: -89.3809802
+          lat: map.lat || 43.0741904,
+          lng: map.lng || -89.3809802
         },
-        zoom: mapConfig.zoom || 18,
-        tilt: mapConfig.zoom || 30
+        zoom: map.zoom || 16,
+        tilt: map.zoom || 30
       },
       controls: {
         compass: false,
@@ -41,8 +44,13 @@ export class NativeGoogleMapsProvider {
       styles: mapConfig.styles || mapStyles.standard
     };
 
-    this.map = this.googleMaps.create(element.nativeElement, options);
-    return this.map.one(GoogleMapsEvent.MAP_READY);
+    this.map = this.googleMaps.create(map.element.nativeElement, options);
+    return this.map.one(GoogleMapsEvent.MAP_READY)
+                   .then(_ => this.loadMarkers(markers));
+  }
+
+  loadMarkers(markers) {
+    markers.map(marker => this.addMarker(marker));
   }
 
   centerToGeolocation() {
@@ -64,19 +72,20 @@ export class NativeGoogleMapsProvider {
     return this.map.moveCamera(cameraPosition);
   }
 
-  addMarker(position, title: string, infoClickCallback, animated = true) {
+  addMarker(marker: IonMarker) {
+    const { lat, lng, iconUrl, title,
+      animated, draggable, visible,
+      zIndex } = marker;
     const markerOptions: MarkerOptions = {
-      position,
+      position: new LatLng(lat, lng),
       title,
+      icon: iconUrl,
       animation: animated ? GoogleMapsAnimation.DROP : null,
-      infoWindowAnchor: infoClickCallback
+      zIndex,
+      draggable,
+      visible
     };
 
     return this.map.addMarker(markerOptions);
-  }
-
-  addMarkerToGeolocation(title: string, infoClickCallback, animated?: boolean) {
-    return this.getGeolocationPosition()
-      .then(position => this.addMarker(position, title, infoClickCallback, animated));
   }
 }
