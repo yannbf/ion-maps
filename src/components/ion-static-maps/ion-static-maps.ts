@@ -1,6 +1,7 @@
 import { IonMarker } from '../ion-marker/ion-marker';
 import { mapSettings } from '../../providers/maps/javascript-google-maps/google-maps.settings';
 import { Component, ContentChildren, ElementRef, Input, QueryList, Renderer2, ViewChild } from '@angular/core';
+import { IonMapStyles } from '../maps.styles';
 
 @Component({
   selector: 'ion-static-maps',
@@ -67,7 +68,7 @@ export class IonStaticMapsComponent {
   /**
    * The style of the map.
    */
-  @Input() style: string | google.maps.StyledMapType[];
+  @Input() mapStyle: string | any[];
 
   @ViewChild('map') mapEl: ElementRef;
   @ContentChildren(IonMarker) mapMarkers: QueryList<IonMarker>;
@@ -97,15 +98,17 @@ export class IonStaticMapsComponent {
       latLng = `${this.lat},${this.lng}`;
     }
 
-    let {
+    const {
       zoom,
       width,
       height,
       mapType,
       language,
       format,
-      style
+      mapStyle,
     } = this;
+
+    const style = this.parseMapStyles(this);
 
     let url = mapSettings.staticMapsUrl
       + 'key=' + mapSettings.apiKey
@@ -126,10 +129,17 @@ export class IonStaticMapsComponent {
   buildMarkersUrl() {
     return this.mapMarkers
       .map(m => {
+        debugger
         let iconOrLabel = m.iconUrl ? `icon:${m.iconUrl}` : `label:${m.label}`;
         return `&markers=color:${m.color}|${iconOrLabel}|${m.lat},${m.lng}`;
       })
       .reduce((x,y) => x + y)
+  }
+
+  parseMapStyles(map) {
+    return typeof map.mapStyle === 'string' 
+           ? IonMapStyles[map.mapStyle]
+           : map.mapStyle;
   }
 
   convertMapStyles(styles) {
