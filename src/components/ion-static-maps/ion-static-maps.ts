@@ -1,5 +1,4 @@
 import { IonMarker } from '../ion-marker/ion-marker';
-import { mapStyles } from '../../providers/maps/maps.styles';
 import { mapSettings } from '../../providers/maps/javascript-google-maps/google-maps.settings';
 import { Component, ContentChildren, ElementRef, Input, QueryList, Renderer2, ViewChild } from '@angular/core';
 

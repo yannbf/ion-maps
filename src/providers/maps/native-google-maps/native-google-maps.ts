@@ -1,7 +1,6 @@
 import { IonMarker } from '../../../components/ion-marker/ion-marker';
 import { IonMaps } from '../../../components/ion-maps/ion-maps';
 import { BaseGoogleMapsProvider } from '../base-maps.interface';
-import { mapStyles } from '../maps.styles';
 import { Injectable } from '@angular/core';
 import {
     GoogleMap,
@@ -14,6 +13,7 @@ import {
 } from '@ionic-native/google-maps';
 
 import { Geolocation } from '@ionic-native/geolocation';
+import { IonMapStyles } from '../../../components/maps.styles';
 
 @Injectable()
 export class NativeGoogleMapsProvider implements BaseGoogleMapsProvider{
@@ -25,28 +25,34 @@ export class NativeGoogleMapsProvider implements BaseGoogleMapsProvider{
   }
 
   // Note: Call this method on ngAfterViewInit
-  create(map: IonMaps, markers = [], mapConfig: any = {}) {
+  create(map: IonMaps, markers = []) {
 
     let options: GoogleMapOptions = {
       camera: {
         target: {
-          lat: map.lat || 43.0741904,
-          lng: map.lng || -89.3809802
+          lat: map.lat,
+          lng: map.lng
         },
-        zoom: map.zoom || 16,
-        tilt: map.zoom || 30
+        zoom: map.zoom,
+        tilt: map.tilt
       },
       controls: {
         compass: false,
         myLocationButton: true,
         zoom: true
       },
-      styles: mapConfig.styles || mapStyles.standard
+      styles: this.parseMapStyles(map)
     };
 
     this.map = this.googleMaps.create(map.element.nativeElement, options);
     return this.map.one(GoogleMapsEvent.MAP_READY)
                    .then(_ => this.loadMarkers(markers));
+  }
+  
+  parseMapStyles(map: IonMaps) {
+    return typeof map.mapStyle === 'string' 
+           ? IonMapStyles[map.mapStyle]
+           : map.mapStyle;
   }
 
   loadMarkers(markers) {

@@ -41,6 +41,11 @@ export class IonMaps {
    */
   @Input() tilt: number;
 
+  /**
+   * The style of the map.
+   */
+  @Input() mapStyle: string | any[];
+
   @ViewChild('map') element: ElementRef;
   @ContentChildren(IonMarker) markers: QueryList<IonMarker>;
 

@@ -1,10 +1,10 @@
 import { IonMarker } from '../../../components/ion-marker/ion-marker';
 import { IonMaps } from '../../../components/ion-maps/ion-maps';
-import { mapStyles } from '../maps.styles';
 import { GoogleMapsLoader } from './google-maps.loader';
 import { BaseGoogleMapsProvider } from '../base-maps.interface';
 import { ElementRef, Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
+import { IonMapStyles } from '../../../components/maps.styles';
 
 @Injectable()
 export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
@@ -35,7 +35,7 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
       zoom,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       disableDefaultUI: true,
-      styles: mapStyles.standard,
+      styles: this.parseMapStyles(map),
       // mapTypeId: mapType,
       // disableDefaultUI,
       // styles
@@ -43,6 +43,12 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
 
     this.map = new google.maps.Map(map.element.nativeElement, mapOptions);
     return Promise.resolve(this.map);
+  }
+
+  parseMapStyles(map: IonMaps) {
+    return typeof map.mapStyle === 'string' 
+           ? IonMapStyles[map.mapStyle]
+           : map.mapStyle;
   }
 
   loadMarkers(markers) {
