@@ -51,7 +51,7 @@ export class IonStaticMapsComponent {
   @Input() zoom: number = 15;
 
   /**
-   * The format of the map. Default value is jpg.
+   * The format of the map. Default value is png.
    */
   @Input() format: string | StaticIonMapFormat;
 
