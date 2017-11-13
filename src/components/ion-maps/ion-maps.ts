@@ -2,6 +2,7 @@ import { Component, ContentChildren, ElementRef, Input, QueryList, ViewChild } f
 
 import { IonMarker } from '../ion-marker/ion-marker';
 import { NativeGoogleMapsProvider } from '../../providers/maps/native-google-maps/native-google-maps';
+import { JavascriptGoogleMapsProvider } from '../../providers/maps/javascript-google-maps/javascript-google-maps';
 
 @Component({
   selector: 'ion-maps',
@@ -42,6 +43,11 @@ export class IonMaps {
   @Input() tilt: number;
 
   /**
+   * Show your current position with a custom marker.
+   */
+  @Input() showGeolocation: boolean;
+
+  /**
    * The style of the map.
    */
   @Input() mapStyle: string | any[];
@@ -52,11 +58,23 @@ export class IonMaps {
   ngAfterContentInit() {
     // After content is rendered, load markers, if any
     let markers = this.markers.toArray();
+
     // Then, generate the map itself
     this.mapsCtrl.create(this, markers);
+
+    //I'm guessing this will fail when the generated map is a native one... Will need a fix for that
+
+    //if showGeolocation is set to true
+    if (this.showGeolocation) {
+      //get the current geolocation
+      let latlng = this.mapsCtrl.getGeolocationPosition();
+
+      //Generate the marker
+      this.jsMapsCtrl.addHtmlMarker(latlng, 'geolocation', '<div class="geolocationInner"></div>', true);
+    }
   }
 
-  constructor(public mapsCtrl: NativeGoogleMapsProvider) { }
+  constructor(public mapsCtrl: NativeGoogleMapsProvider, public jsMapsCtrl: JavascriptGoogleMapsProvider) { }
 
   centerToGeolocation() {
     return this.mapsCtrl.centerToGeolocation();
