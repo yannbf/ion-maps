@@ -105,7 +105,6 @@ export class IonStaticMapsComponent {
       mapType,
       language,
       format,
-      mapStyle,
     } = this;
 
     const style = this.parseMapStyles(this);
