@@ -109,7 +109,7 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
   }
 
   loadMarkers(markers: IonMarker[]) {
-    markers.map(marker => {debugger; marker.customHTML ? this.addHtmlMarker(marker) : this.addMarker(marker)});
+    markers.map(marker =>  marker.customHTML ? this.addHtmlMarker(marker) : this.addMarker(marker));
   }
 
   centerToGeolocation(): Promise<any> {

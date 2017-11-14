@@ -31,5 +31,8 @@ page-home {
 
 @keyframes pulse {
     0%  { transform: scale(1) }
-    100% { transform: scale(3) }
+    100% { 
+        transform: scale(3);
+        opacity:0; 
+    }
 }
