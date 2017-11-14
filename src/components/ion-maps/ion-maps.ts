@@ -2,7 +2,6 @@ import { Component, ContentChildren, ElementRef, Input, QueryList, ViewChild } f
 
 import { IonMarker } from '../ion-marker/ion-marker';
 import { NativeGoogleMapsProvider } from '../../providers/maps/native-google-maps/native-google-maps';
-import { JavascriptGoogleMapsProvider } from '../../providers/maps/javascript-google-maps/javascript-google-maps';
 
 @Component({
   selector: 'ion-maps',
@@ -68,13 +67,10 @@ export class IonMaps {
     if (this.showGeolocation) {
       //get the current geolocation
       let latlng = this.mapsCtrl.getGeolocationPosition();
-
-      //Generate the marker
-      this.jsMapsCtrl.addHtmlMarker(latlng, 'geolocation', '<div class="geolocationInner"></div>', true);
     }
   }
 
-  constructor(public mapsCtrl: NativeGoogleMapsProvider, public jsMapsCtrl: JavascriptGoogleMapsProvider) { }
+  constructor(public mapsCtrl: NativeGoogleMapsProvider) { }
 
   centerToGeolocation() {
     return this.mapsCtrl.centerToGeolocation();

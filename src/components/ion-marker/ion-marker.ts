@@ -28,6 +28,11 @@ export class IonMarker {
   @Input() title: string;
 
   /**
+   * HTML to compose a custom marker element.
+   */
+  @Input() customHTML: string;
+
+  /**
    * Only works on javascript maps.
    * The label (a single uppercase character) for the marker.
    */

@@ -1,79 +1,17 @@
+import { Injectable } from '@angular/core';
+import { Geolocation } from '@ionic-native/geolocation';
+
 import { IonMarker } from '../../../components/ion-marker/ion-marker';
 import { IonMaps } from '../../../components/ion-maps/ion-maps';
 import { GoogleMapsLoader } from './google-maps.loader';
 import { BaseGoogleMapsProvider } from '../base-maps.interface';
-import { ElementRef, Injectable } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation';
 import { IonMapStyles } from '../../../components/maps.styles';
-import { } from '@types/googlemaps';
 
 @Injectable()
 export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
   map: google.maps.Map;
   markers = new Array<google.maps.Marker>();
-
-  htmlMarker = class extends google.maps.OverlayView {
-    
-    latlng_;
-    map_;
-    options;
-    parentclass;
-    html;
-    div_;
-    pointer;
-  
-    constructor(latlng, map, parentclass, html, isPointer) {
-      super();
-      this.latlng_ = latlng;
-      this.map_ = map;
-      this.options = new Array();
-      this.options.push(this.latlng_);
-      this.options.push(this.map_);
-      this.parentclass = parentclass;
-      this.html = html;
-      this.pointer = isPointer;
-  
-      this.div_ = null;
-      this.setValues(this.options);
-    }
-  
-    draw() {
-      let self = this;
-  
-      //Create the parent element marker
-      this.div_ = document.createElement('div');
-      //set any classes defined for the parent element
-      this.div_.className = this.parentclass;
-      //parent element must be set to absolute so it's positioned correctly on the map
-      this.div_.style.position = 'absolute';
-      this.div_.style.width = '200px';
-      this.div_.style.height = '200px';
-      this.div_.style.background = 'black';
-      //if the user wants the cursor to become a pointer when hovered
-      if (this.pointer) {
-        this.div_.style.cursor = 'pointer';
-      }
-      //add the user defined HTML string to the parent div marker...
-      this.div_.innerHTML = this.html;
-  
-      //not sure what this does...
-      let panes = this.getPanes();
-      //here the parent div gets added to the overlay image
-      panes.overlayImage.appendChild(this.div_);
-      //here we make sure that the marker becomes clickable in case the user wants to do something on click
-      google.maps.event.addDomListener(this.div_, "click", function(event) {
-        google.maps.event.trigger(self, "click", event);
-      });
-  
-      //here we create the actual position of the marker on the map, this is where the marker gets added
-      let point = this.getProjection().fromLatLngToDivPixel(this.latlng_);
-      if (point) {
-        this.div_.style.left = point.x + 'px';
-        this.div_.style.top = point.y + 'px';
-      }
-    }
-  
-  }
+  CustomHTMLMarker;
 
   constructor(
     public geolocation: Geolocation
@@ -84,6 +22,7 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
     return GoogleMapsLoader
       .load()
       .then(_ => this.initMap(map))
+      .then(_ => this.setupCustomHTMLMarker())
       .then(_ => this.loadMarkers(markers));
   }
 
@@ -94,7 +33,7 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
       zoom,
     } = map;
 
-    const mapOptions: google.maps.MapOptions  = {
+    const mapOptions: google.maps.MapOptions = {
       center: new google.maps.LatLng(lat, lng),
       zoom,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -106,17 +45,73 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
     };
 
     this.map = new google.maps.Map(map.element.nativeElement, mapOptions);
+
     return Promise.resolve(this.map);
   }
 
-  parseMapStyles(map: IonMaps) {
-    return typeof map.mapStyle === 'string' 
-           ? IonMapStyles[map.mapStyle]
-           : map.mapStyle;
+  setupCustomHTMLMarker() {
+    this.CustomHTMLMarker = class extends google.maps.OverlayView {
+
+      constructor(
+        private latlng,
+        private map,
+        private parentclass,
+        private html,
+        private isPointer
+      ) {
+        super();
+        let options = new Array();
+        options.push(latlng);
+        options.push(map);
+
+        this.setValues(options);
+        this.draw();
+      }
+
+      draw() {
+        //Create the parent element marker
+        let markerDiv = document.createElement('div');
+        //set any classes defined for the parent element
+        markerDiv.className = this.parentclass;
+        //parent element must be set to absolute so it's positioned correctly on the map
+        markerDiv.style.position = 'absolute';
+        markerDiv.style.width = '200px';
+        markerDiv.style.height = '200px';
+        markerDiv.style.background = 'black';
+        //if the user wants the cursor to become a pointer when hovered
+        if (this.isPointer) {
+          markerDiv.style.cursor = 'pointer';
+        }
+        //add the user defined HTML string to the parent div marker...
+        markerDiv.innerHTML = this.html;
+
+        //not sure what this does...
+        let panes = this.getPanes();
+        //here the parent div gets added to the overlay image
+        panes.overlayImage.appendChild(markerDiv);
+        //here we make sure that the marker becomes clickable in case the user wants to do something on click
+        google.maps.event.addDomListener(markerDiv, 'click', (event) => {
+          google.maps.event.trigger(this, 'click', event);
+        });
+
+        //here we create the actual position of the marker on the map, this is where the marker gets added
+        const point = this.getProjection().fromLatLngToDivPixel(this.latlng);
+        if (point) {
+          markerDiv.style.left = `${point.x}px`;
+          markerDiv.style.top = `${point.y}px`;
+        }
+      }
+    }
   }
 
-  loadMarkers(markers) {
-    markers.map(marker => this.addMarker(marker));
+  parseMapStyles(map: IonMaps) {
+    return typeof map.mapStyle === 'string'
+      ? IonMapStyles[map.mapStyle]
+      : map.mapStyle;
+  }
+
+  loadMarkers(markers: IonMarker[]) {
+    markers.map(marker => marker.customHTML ? this.addHtmlMarker(marker) : this.addMarker(marker));
   }
 
   centerToGeolocation(): Promise<any> {
@@ -133,15 +128,16 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
     return Promise.resolve(this.map.panTo(latLng));
   }
 
-  addHtmlMarker(latlng, parentclass, html, isPointer) {
-    //I know the syntax is weird...
-    new this.htmlMarker(latlng, this.map, parentclass, html, isPointer);
+  addHtmlMarker(marker: IonMarker) {
+    const { lat, lng, customHTML } = marker;
+    let parentclass = 'geolocation';
+    new this.CustomHTMLMarker(new google.maps.LatLng(lat, lng), this.map, parentclass, customHTML, true);
   }
 
   addMarker(marker: IonMarker): Promise<google.maps.Marker> {
     const { lat, lng, label, iconUrl, title,
-            animated, draggable, opacity, visible,
-            zIndex } = marker;
+      animated, draggable, opacity, visible,
+      zIndex } = marker;
     const mapMarker = new google.maps.Marker({
       label,
       title,
@@ -150,12 +146,12 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
       zIndex,
       icon: iconUrl,
       draggable,
-      position: new google.maps.LatLng(lat,lng),
+      position: new google.maps.LatLng(lat, lng),
       map: this.map,
       animation: animated ? google.maps.Animation.DROP : null,
     });
 
-    if(title) {
+    if (title) {
       const infoWindow = new google.maps.InfoWindow({ content: title });
       mapMarker.addListener('click', _ => infoWindow.open(this.map, mapMarker));
       // infoWindow.addListener('click', _ => infoClickCallback);
