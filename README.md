@@ -1,10 +1,27 @@
 <p align="center"><img src="ion-maps.png" alt="logo"/></p>
 
 ## IonMaps
-It's a simple component that renders the best possible google map on the device, depending on what platforms it's running on. If on web, it will use javascript google maps, if on a native device, it will use native google maps.
+It's a simple set of components to help ease the development process when using google maps with Ionic.
 
+### Dependencies
+In order to run this project properly, you have to install the native maps plugin as such:
+
+```bash
+$ ionic cordova plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="YourApiKeyHere" --variable API_KEY_FOR_IOS="YourKeyApiHere" --variable LOCATION_WHEN_IN_USE_DESCRIPTION="Show your location on the map" --variable LOCATION_ALWAYS_USAGE_DESCRIPTION="Trace your location on the map"
+$ npm install --save @ionic-native/google-maps
+```
+
+If you run into any issues such as not finding `google` definition, run:
+
+```bash
+npm install --save @types/googlemaps
+```
+
+## Components
 
 ### Ion Maps
+
+ It's a component that renders the best possible google map on the device, depending on what platforms it's running on. If on web, it will use javascript google maps, if on a native device, it will use native google maps.
 
 | Property     | Type     | Definition             |
 |-----------------|------------------|---------------------------------------|
@@ -14,7 +31,7 @@ It's a simple component that renders the best possible google map on the device,
 | width | string | Width of the element. Can be used in %, px, em, rem. Defaults to '100%' |
 | zoom | number | Initial zoom of the map. Defaults to 15 |
 | tilt | number | Initial tilt of the map. |
-| mapStyle | string or json | Theme of the map. Possible values: `standard`, `silver`, `light`, `dark`, `night`, `midnight`, `aubergine`, `military`, `paleDawn`, `red`, `purple`, `green`, `yellow`. You can also pass a custom style json object with your own custom properties.  Defaults to `standard`. |
+| mapStyle | string or json | Theme of the map. Possible values: `standard`, `silver`, `light`, `dark`, `night`, `midnight`, `aubergine`, `military`, `paledawn`, `red`, `purple`, `green`, `yellow`. You can also pass a custom style json object with your own custom properties.  Defaults to `standard`. |
 | showGeolocation | boolean | Whether or not to show a pulsating dot in your geolocation. Defaults to false. |
 
 ***Usage***
@@ -41,6 +58,8 @@ ps: The component can be used with or without markers.
 
 ### Ion Static Maps
 
+Renders a static for moments where you need a fast rendered page that doesn't need map interaction.
+
 | Property     | Type     | Definition             |
 |-----------------|------------------|---------------------------------------|
 | lat | string |Latitude position of the map. Required if not using address. |
@@ -52,7 +71,7 @@ ps: The component can be used with or without markers.
 | format | string | Image format of the generated map. Possible values: `png`, `jpeg`, `gif`. Defaults to `png`.|
 | language | string | Language of the map labels. Only works in certain countries. |
 | mapType | string | Type of the map. Possible values: HYBRID, ROADMAP, SATELLITE and TERRAIN. |
-| mapStyle | string or json | Theme of the map. Possible values: `standard`, `silver`, `light`, `dark`, `night`, `midnight`, `aubergine`, `military`, `paleDawn`, `red`, `purple`, `green`, `yellow`. You can also pass a custom style json object with your own custom properties. Defaults to `standard`. |
+| mapStyle | string or json | Theme of the map. Possible values: `standard`, `silver`, `light`, `dark`, `night`, `midnight`, `aubergine`, `military`, `paledawn`, `red`, `purple`, `green`, `yellow`. You can also pass a custom style json object with your own custom properties. Defaults to `standard`. |
 
 ***Usage***
 ps: The component can be used with or without markers.
@@ -92,16 +111,9 @@ Note that this component can be used with both `<ion-maps>` and `<ion-static-map
 | customHTML | string | HTML to compose a custom marker element. *Only works on javascript maps.*|
 | parentClass | string | Class or classes to be added on the parent div of a customHTML marker element. Use it along with `customHTML`, but not required. |
 
-### Dependencies
-In order to run this project properly, you have to install the native maps plugin as such:
+### Styling
 
-```bash
-$ ionic cordova plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="YourKeyHere" --variable API_KEY_FOR_IOS="YourKeyHere" --variable LOCATION_WHEN_IN_USE_DESCRIPTION="Show your location on the map" --variable LOCATION_ALWAYS_USAGE_DESCRIPTION="Trace your location on the map"
-$ npm install --save @ionic-native/google-maps
-```
+As stated above, both `ion-maps` and `ion-static-maps` accept a property named `mapStyle`. It takes either a string with a name of a predefined style, or a custom style object, of which you can get on [Maps Style Wizard](https://mapstyle.withgoogle.com/) or [Snazzy Maps](https://snazzymaps.com/).
 
-If you run into any issues such as not finding `google` definition, run:
-
-```bash
-npm install --save @types/googlemaps
-```
+If you don't use this param, the map will be rendered with default styles. In case you choose to use one of the presets, this is what the map is going to look like:
+<p align="center"><img src="ion-map-styles.png" alt="map-styles"/></p>
