@@ -1,8 +1,14 @@
 <ion-content padding text-center>
   <h2>Interactive map</h2>
-  <ion-maps mapStyle="military" lat="40.714728" lng="-73.998672">
-    <ion-marker customHTML="<div class='geolocationInner'></div>" lat="40.718217" lng="-73.998284" label="Y"></ion-marker>
-    <ion-marker lat="40.718217" lng="-73.993434" title="OH YEA" iconUrl="http://icons.iconarchive.com/icons/paomedia/small-n-flat/48/map-marker-icon.png"></ion-marker>
+  <ion-maps mapStyle="military" lat="40.718217" lng="-73.993434">
+    <!--Custom HTML marker-->
+    <ion-marker lat="40.717317" lng="-73.995284" parentClass="heart" customHTML="<div class='outline'></div>"></ion-marker>
+
+    <!--Custom icon marker-->
+    <ion-marker lat="40.718217" lng="-73.991434" title="Custom icon" iconUrl="http://icons.iconarchive.com/icons/paomedia/small-n-flat/48/map-marker-icon.png"></ion-marker>
+
+    <!--Normal marker-->
+    <ion-marker lat="40.718417" lng="-73.996734" label="Y" title="Normal Marker"></ion-marker>
   </ion-maps>
 
   <h2>Static map</h2>
