@@ -51,7 +51,7 @@ export class NativeGoogleMapsProvider implements BaseGoogleMapsProvider{
   
   parseMapStyles(map: IonMaps) {
     return typeof map.mapStyle === 'string' 
-           ? IonMapStyles[map.mapStyle]
+           ? IonMapStyles[map.mapStyle.toLowerCase()]
            : map.mapStyle;
   }
 
