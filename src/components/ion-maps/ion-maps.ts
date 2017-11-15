@@ -42,9 +42,9 @@ export class IonMaps {
   @Input() tilt: number;
 
   /**
-   * Show your current position with a custom marker.
+   * Show your current position with a custom marker. Default value is true;
    */
-  @Input() showGeolocation: boolean;
+  @Input() showGeolocation: boolean = true;
 
   /**
    * The style of the map.
@@ -60,14 +60,6 @@ export class IonMaps {
 
     // Then, generate the map itself
     this.mapsCtrl.create(this, markers);
-
-    //I'm guessing this will fail when the generated map is a native one... Will need a fix for that
-
-    //if showGeolocation is set to true
-    if (this.showGeolocation) {
-      //get the current geolocation
-      let latlng = this.mapsCtrl.getGeolocationPosition();
-    }
   }
 
   constructor(public mapsCtrl: NativeGoogleMapsProvider) { }
