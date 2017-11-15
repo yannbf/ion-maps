@@ -13,23 +13,29 @@ It's a simple component that renders the best possible google map on the device,
 | zoom | number | Initial zoom of the map. Defaults to 15 |
 | tilt | number | Initial tilt of the map. |
 | mapStyle | string or json | Theme of the map. Possible values: `standard`, `silver`, `light`, `dark`, `night`, `midnight`, `aubergine`, `military`, `paleDawn`, `red`, `purple`, `green`, `yellow`. You can also pass a custom style json object with your own custom properties.  Defaults to `standard`. |
+| showGeolocation | boolean | Whether or not to show a pulsating dot in your geolocation. Defaults to false. |
 
 ***Usage***
+ps: The component can be used with or without markers.
+
 ```html
 <ion-content>
   <ion-maps mapStyle="military" lat="40.714728" lng="-73.998672">
-    <ion-marker lat="40.718217" lng="-73.998284" label="Y"></ion-marker>
-    <ion-marker lat="40.718217" lng="-73.993434" title="New York Pizza" iconUrl="http://icons.iconarchive.com/icons/paomedia/small-n-flat/48/map-marker-icon.png"></ion-marker>
+    <!--Normal marker-->
+    <ion-marker lat="40.718417" lng="-73.996734" label="Y" title="Normal Marker"></ion-marker>
+
+    <!--Custom icon marker-->
+    <ion-marker lat="40.718217" lng="-73.991434" title="Custom icon" iconUrl="http://icons.iconarchive.com/icons/paomedia/small-n-flat/48/map-marker-icon.png"></ion-marker>
+
+    <!--Custom HTML marker-->
+    <ion-marker lat="40.717317" lng="-73.995284" parentClass="custom-marker-outer" customHTML="<div class='custom-marker-inner'></div>"></ion-marker>
   </ion-maps>
 
   <!-- Or without markers -->
-  <ion-maps lat="40.714728" lng="-73.998672" zoom="17"></ion-maps>
+  <ion-maps lat="40.714728" lng="-73.998672"></ion-maps>
   
 <ion-content>
 ```
-
-ps: This component can be used alone with no markers.
-
 
 ### Ion Static Maps
 
@@ -47,15 +53,20 @@ ps: This component can be used alone with no markers.
 | mapStyle | string or json | Theme of the map. Possible values: `standard`, `silver`, `light`, `dark`, `night`, `midnight`, `aubergine`, `military`, `paleDawn`, `red`, `purple`, `green`, `yellow`. You can also pass a custom style json object with your own custom properties. Defaults to `standard`. |
 
 ***Usage***
+ps: The component can be used with or without markers.
+
 ```html
 <ion-content>
   <ion-static-maps mapStyle="silver" lat="40.714728" lng="-73.998672">
-    <ion-marker lat="40.718217" lng="-73.998284" color="yellow" label="Y"></ion-marker>
-    <ion-marker lat="40.718217" lng="-73.993434" iconUrl="http://icons.iconarchive.com/icons/paomedia/small-n-flat/48/map-marker-icon.png"></ion-marker>
+     <!--Normal marker-->
+    <ion-marker lat="40.718417" lng="-73.996734" color="yellow" label="Y"></ion-marker>
+
+    <!--Custom icon marker-->
+    <ion-marker lat="40.718217" lng="-73.991434" iconUrl="http://icons.iconarchive.com/icons/paomedia/small-n-flat/48/map-marker-icon.png"></ion-marker>
   </ion-static-maps>
 
   <!-- Or without markers -->
-  <ion-static-maps lat="40.714728" lng="-73.998672" zoom="17"></ion-static-maps>
+  <ion-static-maps lat="40.714728" lng="-73.998672"></ion-static-maps>
 </ion-content>
 ```
 
@@ -76,7 +87,8 @@ Note that this component can be used with both `<ion-maps>` and `<ion-static-map
 | visible | boolean | If true, the marker visible in the map. Default value is false. |
 | opacity | number | Marker's opacity between 0.0 and 1.0. *Only works with javascript maps*. Defaults to 1. |
 | zIndex | number | zIndex of the marker. Defaults to 1. |
-
+| customHTML | string | HTML to compose a custom marker element. *Only works on javascript maps.*|
+| parentClass | string | Class or classes to be added on the parent div of a customHTML marker element. Use it along with `customHTML`, but not required. |
 
 ### Dependencies
 In order to run this project properly, you have to install the native maps plugin as such:

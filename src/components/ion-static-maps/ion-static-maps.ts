@@ -128,7 +128,6 @@ export class IonStaticMapsComponent {
   buildMarkersUrl() {
     return this.mapMarkers
       .map(m => {
-        debugger
         let iconOrLabel = m.iconUrl ? `icon:${m.iconUrl}` : `label:${m.label}`;
         return `&markers=color:${m.color}|${iconOrLabel}|${m.lat},${m.lng}`;
       })

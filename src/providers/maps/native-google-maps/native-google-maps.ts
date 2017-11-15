@@ -26,7 +26,7 @@ export class NativeGoogleMapsProvider implements BaseGoogleMapsProvider{
 
   // Note: Call this method on ngAfterViewInit
   create(map: IonMaps, markers = []) {
-
+    const { lat, lng, zoom, tilt } = map;
     let options: GoogleMapOptions = {
       camera: {
         target: {
@@ -67,6 +67,10 @@ export class NativeGoogleMapsProvider implements BaseGoogleMapsProvider{
   getGeolocationPosition() {
     return this.geolocation.getCurrentPosition()
       .then((position) => new LatLng(position.coords.latitude, position.coords.longitude));
+  }
+
+  addGeolocationPin() {
+    // No need to do anything, native already handles that.
   }
 
   centerToPosition(latLng: any, zoom?: number, tilt?: number) {

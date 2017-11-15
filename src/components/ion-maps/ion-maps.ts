@@ -42,6 +42,11 @@ export class IonMaps {
   @Input() tilt: number;
 
   /**
+   * Show your current position with a custom marker. Default value is false;
+   */
+  @Input() showGeolocation: boolean;
+
+  /**
    * The style of the map.
    */
   @Input() mapStyle: string | any[];
@@ -52,6 +57,7 @@ export class IonMaps {
   ngAfterContentInit() {
     // After content is rendered, load markers, if any
     let markers = this.markers.toArray();
+
     // Then, generate the map itself
     this.mapsCtrl.create(this, markers);
   }
