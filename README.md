@@ -1,3 +1,5 @@
+<p align="center"><img src="ion-maps.png" alt="logo"/></p>
+
 ## IonMaps
 It's a simple component that renders the best possible google map on the device, depending on what platforms it's running on. If on web, it will use javascript google maps, if on a native device, it will use native google maps.
 
