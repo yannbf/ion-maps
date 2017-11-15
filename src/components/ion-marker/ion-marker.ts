@@ -28,10 +28,17 @@ export class IonMarker {
   @Input() title: string;
 
   /**
+   * Only works on javascript maps.
    * HTML to compose a custom marker element.
    */
   @Input() customHTML: string;
 
+  /**
+   * Only works on javascript maps.
+   * Class or classes to be added on the parent div of a customHTML marker element.
+   */
+  @Input() parentClass: string;
+  
   /**
    * Only works on javascript maps.
    * The label (a single uppercase character) for the marker.

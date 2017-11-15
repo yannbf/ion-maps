@@ -42,9 +42,9 @@ export class IonMaps {
   @Input() tilt: number;
 
   /**
-   * Show your current position with a custom marker. Default value is true;
+   * Show your current position with a custom marker. Default value is false;
    */
-  @Input() showGeolocation: boolean = true;
+  @Input() showGeolocation: boolean;
 
   /**
    * The style of the map.

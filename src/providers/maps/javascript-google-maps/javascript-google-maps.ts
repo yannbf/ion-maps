@@ -23,6 +23,7 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
       .load()
       .then(_ => this.initMap(map))
       .then(_ => this.setupCustomHTMLMarker())
+      .then(_ => this.addGeolocationPin(map.showGeolocation))
       .then(_ => this.loadMarkers(markers));
   }
 
@@ -61,44 +62,55 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
         private div
       ) {
         super();
-
         this.setMap(map);
       }
 
       onAdd() {
-        //Create the parent element marker
+        // Create the parent element marker
         this.div = document.createElement('div');
-        //set any classes defined for the parent element
+
+        // Set any classes defined for the parent element
         this.div.className = this.parentclass;
-        //parent element must be set to absolute so it's positioned correctly on the map
+
+        // Parent element must be set to absolute so it's positioned correctly on the map
         this.div.style.position = 'absolute';
-        //if the user wants the cursor to become a pointer when hovered
+
+        // If the user wants the cursor to become a pointer when hovered
         if (this.isPointer) {
           this.div.style.cursor = 'pointer';
         }
-        //add the user defined HTML string to the parent div marker...
+
+        // Add the user defined HTML string to the parent div marker...
         this.div.innerHTML = this.html;
 
-        //not sure what this does...
+        // The parent div gets added to the overlay image
         let panes = this.getPanes();
-        //here the parent div gets added to the overlay image
         panes.overlayImage.appendChild(this.div);
       }
 
       draw() {
 
-        //here we make sure that the marker becomes clickable in case the user wants to do something on click
+        // We make sure that the marker becomes clickable in case the user wants to do something on click
         google.maps.event.addDomListener(this.div, 'click', (event) => {
           google.maps.event.trigger(this, 'click', event);
         });
 
-        //here we create the actual position of the marker on the map, this is where the marker gets added
+        // We create the actual position of the marker on the map, this is where the marker gets added
         const point = this.getProjection().fromLatLngToDivPixel(this.latlng);
         if (point) {
           this.div.style.left = `${point.x}px`;
           this.div.style.top = `${point.y}px`;
         }
       }
+    }
+  }
+
+  addGeolocationPin(showGeolocation) {
+    if(showGeolocation == 'true') {
+      return this.getGeolocationPosition().then(position => {
+        const geolocationHTML = `<div class='geolocation-inner'></div>`;
+        new this.USGSOverlay(position, this.map, 'geolocation', geolocationHTML, false);
+      });
     }
   }
 
@@ -127,9 +139,8 @@ export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
   }
 
   addHtmlMarker(marker: IonMarker) {
-    const { lat, lng, customHTML } = marker;
-    let parentclass = 'geolocation';
-    new this.USGSOverlay(new google.maps.LatLng(lat, lng), this.map, parentclass, customHTML, true);
+    const { lat, lng, customHTML, parentClass } = marker;
+    new this.USGSOverlay(new google.maps.LatLng(lat, lng), this.map, parentClass, customHTML, true);
   }
 
   addMarker(marker: IonMarker): Promise<google.maps.Marker> {
