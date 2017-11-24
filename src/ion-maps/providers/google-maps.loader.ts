@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { mapSettings } from './google-maps.settings';
+
+import { mapSettings } from '../config/google-maps.settings';
 
 @Injectable()
 export class GoogleMapsLoader {

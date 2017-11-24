@@ -1,14 +1,58 @@
 import { Component, ContentChildren, ElementRef, Input, QueryList, ViewChild } from '@angular/core';
 
-import { IonMarker } from '../ion-marker/ion-marker';
-import { NativeGoogleMapsProvider } from '../../providers/maps/native-google-maps/native-google-maps';
+import { IonMarker } from './ion-marker';
+import { NativeGoogleMapsProvider } from '../providers/native-google-maps';
 
 @Component({
   selector: 'ion-maps',
   template: `
     <div #map [style.height]="height" [style.width]="width"></div>
-    <ng-content></ng-content>
-  `
+    <ng-content></ng-content>`,
+  styles: [
+    `ion-maps {
+      .geolocation {
+
+        $box-shadow: 0px 0px 2px  rgba(0,0,0,0.6);
+        $icon-size: 20px;
+        $icon-radius: 100%;
+        $color-icon-outer: #65a3ff;
+        $color-icon-inner: rgba(101, 163, 255, 0.4);
+
+        z-index:2;
+        position:absolute;
+        width:$icon-size;
+        height:$icon-size;
+        border: 2px solid white;
+        border-radius:$icon-radius;
+        background:$color-icon-outer;
+        box-shadow: $box-shadow;
+        -moz-box-shadow: $box-shadow;
+        -webkit-box-shadow: $box-shadow;
+        -o-box-shadow: $box-shadow;
+
+        .geolocation-inner {
+          top: -2px;
+          left: -2px;
+          z-index:1;
+          position: relative;
+          width:$icon-size;
+          height:$icon-size;
+          background:$color-icon-inner;
+          border: 1px solid rgba(101, 163, 255, 0.5);
+          border-radius:$icon-radius;
+          animation: 1.6s pulse infinite linear;
+        }
+      }
+
+      @keyframes pulse {
+        from  { transform: scale(1) }
+        to {
+          transform: scale(3);
+          opacity:0;
+        }
+      }
+    }`
+  ]
 })
 export class IonMaps {
   /**

@@ -1,4 +1,4 @@
-import { IonMaps } from '../../ion-maps/components/ion-maps/ion-maps';
+import { IonMaps } from '../../ion-maps';
 import { Component, ViewChild } from '@angular/core';
 import { NavController } from 'ionic-angular';
 

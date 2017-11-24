@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation';
 
-import { IonMarker } from '../../../components/ion-marker/ion-marker';
-import { IonMaps } from '../../../components/ion-maps/ion-maps';
+import { IonMarker } from '../components/ion-marker';
+import { IonMapStyles } from '../config/maps.styles';
+import { IonMaps } from '../components/ion-maps';
+
 import { GoogleMapsLoader } from './google-maps.loader';
-import { BaseGoogleMapsProvider } from '../base-maps.interface';
-import { IonMapStyles } from '../../../components/maps.styles';
+import { BaseGoogleMapsProvider } from './base-maps.interface';
 
 @Injectable()
 export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {

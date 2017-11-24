@@ -1,8 +1,8 @@
-import { IonMaps } from './components/ion-maps/ion-maps';
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { IonStaticMapsComponent } from './components/ion-static-maps/ion-static-maps';
-import { IonMarker } from './components/ion-marker/ion-marker';
-import { MyProvidersModule } from './providers/providers.module';
+import { IonMaps } from './components/ion-maps';
+import { IonStaticMapsComponent } from './components/ion-static-maps';
+import { IonMarker } from './components/ion-marker';
+import { IonMapsProvidersModule } from './providers/providers.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,7 @@ import { MyProvidersModule } from './providers/providers.module';
     IonMarker,
   ],
 	imports: [
-    MyProvidersModule.forRoot(),
+    IonMapsProvidersModule.forRoot(),
   ],
 	exports: [
     IonMaps,

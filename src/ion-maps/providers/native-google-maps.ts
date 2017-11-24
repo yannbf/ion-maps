@@ -1,6 +1,7 @@
-import { IonMaps } from '../../../components/ion-maps/ion-maps';
-import { IonMarker } from '../../../components/ion-marker/ion-marker';
-import { BaseGoogleMapsProvider } from '../base-maps.interface';
+import { IonMarker } from '../components/ion-marker';
+import { IonMaps } from '../components/ion-maps';
+
+import { BaseGoogleMapsProvider } from './base-maps.interface';
 import { Injectable } from '@angular/core';
 import {
     GoogleMap,
@@ -13,7 +14,7 @@ import {
 } from '@ionic-native/google-maps';
 
 import { Geolocation } from '@ionic-native/geolocation';
-import { IonMapStyles } from '../../../components/maps.styles';
+import { IonMapStyles } from '../config/maps.styles';
 
 @Injectable()
 export class NativeGoogleMapsProvider implements BaseGoogleMapsProvider{

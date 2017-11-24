@@ -1,7 +1,8 @@
-import { IonMarker } from '../ion-marker/ion-marker';
-import { mapSettings } from '../../providers/maps/javascript-google-maps/google-maps.settings';
 import { Component, ContentChildren, ElementRef, Input, QueryList, Renderer2, ViewChild } from '@angular/core';
-import { IonMapStyles } from '../maps.styles';
+
+import { IonMarker } from './ion-marker';
+import { mapSettings } from '../config/google-maps.settings';
+import { IonMapStyles } from '../config/maps.styles';
 
 @Component({
   selector: 'ion-static-maps',
@@ -135,7 +136,7 @@ export class IonStaticMapsComponent {
   }
 
   parseMapStyles(map) {
-    return typeof map.mapStyle === 'string' 
+    return typeof map.mapStyle === 'string'
            ? IonMapStyles[map.mapStyle]
            : map.mapStyle;
   }

@@ -1,5 +1,5 @@
-import { IonMaps } from '../../components/ion-maps/ion-maps';
-import { IonMarker } from '../../components/ion-marker/ion-marker';
+import { IonMaps } from '../components/ion-maps';
+import { IonMarker } from '../components/ion-marker';
 import { ElementRef } from '@angular/core';
 
 export interface BaseGoogleMapsProvider {
