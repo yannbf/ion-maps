@@ -1,5 +1,5 @@
-import { IonMarker } from '../../../components/ion-marker/ion-marker';
 import { IonMaps } from '../../../components/ion-maps/ion-maps';
+import { IonMarker } from '../../../components/ion-marker/ion-marker';
 import { BaseGoogleMapsProvider } from '../base-maps.interface';
 import { Injectable } from '@angular/core';
 import {
@@ -48,9 +48,9 @@ export class NativeGoogleMapsProvider implements BaseGoogleMapsProvider{
     return this.map.one(GoogleMapsEvent.MAP_READY)
                    .then(_ => this.loadMarkers(markers));
   }
-  
+
   parseMapStyles(map: IonMaps) {
-    return typeof map.mapStyle === 'string' 
+    return typeof map.mapStyle === 'string'
            ? IonMapStyles[map.mapStyle.toLowerCase()]
            : map.mapStyle;
   }
