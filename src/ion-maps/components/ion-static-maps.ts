@@ -75,7 +75,7 @@ export class IonStaticMapsComponent {
   @ContentChildren(IonMarker) mapMarkers: QueryList<IonMarker>;
 
   private markers: Array<IonMarker>;
-  private mapsUrl: string;
+  mapsUrl: string;
 
   constructor(private renderer: Renderer2) { }
 
