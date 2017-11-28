@@ -1,50 +1,53 @@
 {
-    "name": "ion-maps",
-    "version": "0.0.2",
-    "author": "Yann Braga",
-    "description": "An Ionic Maps component",
-    "main": "dist/index.js",
-    "typings": "dist/index.d.ts",
-    "scripts": {
-        "build": "rm -rf aot dist && ngc",
-        "shipit": "npm run build && npm publish"
-    },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/yannbf/ion-maps.git"
-    },
-    "keywords": [
-      "ionic3",
-      "maps",
-      "ion-maps",
-      "ionic",
-      "angular2",
-      "angular5"
-    ],
-    "license": "MIT",
-    "bugs": {
-      "url": "https://github.com/yannbf/ion-maps.git/issues"
-    },
-    "homepage": "https://github.com/yannbf/ion-maps.git#readme",
-    "devDependencies": {
-        "@angular/common": "4.4.4",
-        "@angular/compiler": "4.4.4",
-        "@angular/core": "4.4.4",
-        "@angular/forms": "4.4.4",
-        "@angular/http": "4.4.4",
-        "@angular/platform-browser": "4.4.4",
-        "@angular/platform-browser-dynamic": "4.4.4",
-        "@angular/compiler-cli": "4.4.4",
-        "@ionic/app-scripts": "3.1.0",
-        "@types/googlemaps": "^3.29.2",
-        "ionic": "3.18.0",
-        "ionic-angular": "3.9.2",
-        "typescript": "2.4.2",
-        "rxjs": "5.5.2",
-        "zone.js": "0.8.18"
-    },
-    "peerDependencies": {
-      "@ionic-native/geolocation": "^4.0.0",
-      "@ionic-native/google-maps": "^4.0.0"
-    }
+  "name": "ion-maps",
+  "version": "0.0.2",
+  "author": "Yann Braga",
+  "description": "An Ionic Maps component",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf aot dist && ngc",
+    "shipit": "npm run build && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yannbf/ion-maps.git"
+  },
+  "keywords": [
+    "ionic3",
+    "maps",
+    "ion-maps",
+    "ionic",
+    "angular2",
+    "angular5"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yannbf/ion-maps.git/issues"
+  },
+  "homepage": "https://github.com/yannbf/ion-maps.git#readme",
+  "devDependencies": {
+    "@angular/common": "4.4.4",
+    "@angular/compiler": "4.4.4",
+    "@angular/core": "4.4.4",
+    "@angular/forms": "4.4.4",
+    "@angular/http": "4.4.4",
+    "@angular/platform-browser": "4.4.4",
+    "@angular/platform-browser-dynamic": "4.4.4",
+    "@angular/compiler-cli": "4.4.4",
+    "@ionic/app-scripts": "3.1.0",
+    "@ionic-native/core": "^4.0.0",
+    "@ionic-native/geolocation": "^4.0.0",
+    "@ionic-native/google-maps": "^4.0.0",
+    "@types/googlemaps": "^3.29.2",
+    "ionic": "3.18.0",
+    "ionic-angular": "3.9.2",
+    "typescript": "2.4.2",
+    "rxjs": "5.5.2",
+    "zone.js": "0.8.18"
+  },
+  "peerDependencies": {
+    "@ionic-native/geolocation": "^4.0.0",
+    "@ionic-native/google-maps": "^4.0.0"
+  }
 }
