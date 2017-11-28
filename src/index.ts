@@ -1,3 +1,4 @@
+export * from './ion-maps.module';
 export * from './components/ion-maps';
 export * from './components/ion-static-maps';
 export * from './components/ion-marker';
