@@ -2,6 +2,7 @@ import { Component, ContentChildren, ElementRef, Input, QueryList, ViewChild } f
 
 import { IonMarker } from './ion-marker';
 import { NativeGoogleMapsProvider } from '../providers/native-google-maps';
+import { Platform } from 'ionic-angular';
 
 @Component({
   selector: 'ion-maps',
@@ -98,15 +99,16 @@ export class IonMaps {
   @ViewChild('map') element: ElementRef;
   @ContentChildren(IonMarker) markers: QueryList<IonMarker>;
 
+  constructor(public platform: Platform, public mapsCtrl: NativeGoogleMapsProvider) { }
+
   ngAfterContentInit() {
     // After content is rendered, load markers, if any
     let markers = this.markers.toArray();
-
-    // Then, generate the map itself
-    this.mapsCtrl.create(this, markers);
+    this.platform.ready().then(_ => {
+      // Then, generate the map itself
+      this.mapsCtrl.create(this, markers);
+    })
   }
-
-  constructor(public mapsCtrl: NativeGoogleMapsProvider) { }
 
   centerToGeolocation() {
     return this.mapsCtrl.centerToGeolocation();
