@@ -7,6 +7,7 @@ import { IonMaps } from '../components/ion-maps';
 
 import { GoogleMapsLoader } from './google-maps.loader';
 import { BaseGoogleMapsProvider } from './base-maps.interface';
+import {} from '@types/google-maps';
 
 @Injectable()
 export class JavascriptGoogleMapsProvider implements BaseGoogleMapsProvider {
